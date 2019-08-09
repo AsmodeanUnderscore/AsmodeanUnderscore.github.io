@@ -3,6 +3,51 @@
 	<title>UR</title>
 	<link rel="stylesheet" href="ur.css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<script language="javascript" type="text/javascript">
+		function mbcO(x) {
+			// simulates calling myboard.contentsOf(x)
+			return testArray[baseArray.indexOf(x)];
+		}
+		function flip() {
+			// flips four dice and stores the result (0 or 1) in rollResult[0,1,2,3].
+			var j;
+			totalRoll = 0;
+			for (j = 0; j < 4; j++) {
+				rollResult[j] = Math.floor(Math.random() * 2);
+				totalRoll += rollResult[j];
+			}
+			console.log("Rolled " + rollResult + " for a total of " + totalRoll);
+			return totalRoll;
+		}
+		function renderFromArray() {
+			// baseArray[x] will "return" the string address of the cell with number address x, similar with diceLabel[x]
+			baseArray = ["o4","o3","o2","o1","o6","o5","m1","m2","m3","m4","m5","m6","m7","m8","b4","b3","b2","b1","b6","b5"];
+			diceLabel = ["dicea","diceb","dicec","diced"];
+			// to be used later in part 2 of the renderer. previously entries 20 to 29 of the game state array
+			statsArray = [1,3,3,0,1,0,0,1,0,25];
+			// a test array that already has the state of the board loaded in
+			testArray = ["o","o","n","n","n","n","o","b","n","b","n","b","n","n","n","n","n","n","n","b"];
+			// it won't let me do "a string".concat("more strings"), i have to declare a variable first.
+			var imgstr = "img/";
+			// two variables for the dice
+			rollResult = [1,0,1,1];
+			var totalRoll = 0;
+			var j;
+			for (j = 0; j < 20; j++) {
+				document.getElementById(baseArray[j]).src = imgstr.concat("icon",mbcO(baseArray[j]),".png");
+				/*   for example,                                                mcbO(    "m2"    )
+				document.getElementById(    "m2"    ).src = "   img /      icon        b             .png" ; */
+			}
+			flip(); // we now have new rollResult and totalRoll
+			for (j = 0; j < 4; j++) {
+				document.getElementById(diceLabel[j]).src = imgstr.concat("d",rollResult[j],".png");
+				//   for example,      (  "dicec"   ).src = "   img /      d      0          .png");
+			}
+		}
+		function clicked(cell) {
+			console.log("Cell " + cell + " has been clicked.");
+		}
+	</script>
 </head>
 
 <body>
@@ -31,31 +76,33 @@
 				<td><img id="bscore" src="img/score/scb3.png" /><img src="img/buffer1.png" /><img id="bres" src="img/reserve/0.png" /><img src="img/binreserve.png" /></td>
 			</tr>
 			<tr><td><!-- PLAYING PIECES -->
-					<img id="o4" src="img/iconn.png" style="position:relative; top:-234px; left:6px; z-index:2;" />
-					<img id="o3" src="img/iconn.png" style="position:relative; top:-234px; left:2px; z-index:2;" />
-					<img id="o2" src="img/icono.png" style="position:relative; top:-234px; left:-2px; z-index:2;" />
-					<img id="o1" src="img/icono.png" style="position:relative; top:-234px; left:-7px; z-index:2;" />
-					<img id="o6" src="img/iconn.png" style="position:relative; top:-234px; left:117px; z-index:2;" />
-					<img id="o5" src="img/iconn.png" style="position:relative; top:-234px; left:113px; z-index:2;" />
-					<img id="m1" src="img/iconb.png" style="position:relative; top:-170px; left:-403px; z-index:2;" />
-					<img id="m2" src="img/icono.png" style="position:relative; top:-238px; left:70px; z-index:2;" />
-					<img id="m3" src="img/iconn.png" style="position:relative; top:-238px; left:66px; z-index:2;" />
-					<img id="m4" src="img/iconb.png" style="position:relative; top:-238px; left:62px; z-index:2;" />
-					<img id="m5" src="img/iconn.png" style="position:relative; top:-238px; left:57px; z-index:2;" />
-					<img id="m6" src="img/icono.png" style="position:relative; top:-238px; left:53px; z-index:2;" />
-					<img id="m7" src="img/iconn.png" style="position:relative; top:-238px; left:49px; z-index:2;" />
-					<img id="m8" src="img/iconn.png" style="position:relative; top:-238px; left:45px; z-index:2;" />
-					<img id="b4" src="img/iconn.png" style="position:relative; top:-242px; left:6px; z-index:2;" />
-					<img id="b3" src="img/iconb.png" style="position:relative; top:-242px; left:2px; z-index:2;" />
-					<img id="b2" src="img/iconn.png" style="position:relative; top:-242px; left:-2px; z-index:2;" />
-					<img id="b1" src="img/iconn.png" style="position:relative; top:-242px; left:-7px; z-index:2;" />
-					<img id="b6" src="img/iconn.png" style="position:relative; top:-242px; left:117px; z-index:2;" />
-					<img id="b5" src="img/iconb.png" style="position:relative; top:-242px; left:113px; z-index:2;" />
+					<img id="o4" onclick="clicked('o4')" src="img/iconn.png" style="position:relative; top:-234px; left:6px; z-index:2;" />
+					<img id="o3" onclick="clicked('o3')" src="img/iconn.png" style="position:relative; top:-234px; left:2px; z-index:2;" />
+					<img id="o2" onclick="clicked('o2')" src="img/iconn.png" style="position:relative; top:-234px; left:-2px; z-index:2;" />
+					<img id="o1" onclick="clicked('o1')" src="img/icono.png" style="position:relative; top:-234px; left:-7px; z-index:2;" />
+					<img id="o6" onclick="clicked('o6')" src="img/iconn.png" style="position:relative; top:-234px; left:117px; z-index:2;" />
+					<img id="o5" onclick="clicked('o5')" src="img/iconn.png" style="position:relative; top:-234px; left:113px; z-index:2;" />
+					<img id="m1" onclick="clicked('m1')" src="img/iconb.png" style="position:relative; top:-170px; left:-403px; z-index:2;" />
+					<img id="m2" onclick="clicked('m2')" src="img/icono.png" style="position:relative; top:-238px; left:70px; z-index:2;" />
+					<img id="m3" onclick="clicked('m3')" src="img/iconn.png" style="position:relative; top:-238px; left:66px; z-index:2;" />
+					<img id="m4" onclick="clicked('m4')" src="img/iconb.png" style="position:relative; top:-238px; left:62px; z-index:2;" />
+					<img id="m5" onclick="clicked('m5')" src="img/iconn.png" style="position:relative; top:-238px; left:57px; z-index:2;" />
+					<img id="m6" onclick="clicked('m6')" src="img/icono.png" style="position:relative; top:-238px; left:53px; z-index:2;" />
+					<img id="m7" onclick="clicked('m7')" src="img/iconn.png" style="position:relative; top:-238px; left:49px; z-index:2;" />
+					<img id="m8" onclick="clicked('m8')" src="img/iconn.png" style="position:relative; top:-238px; left:45px; z-index:2;" />
+					<img id="b4" onclick="clicked('b4')" src="img/iconn.png" style="position:relative; top:-242px; left:6px; z-index:2;" />
+					<img id="b3" onclick="clicked('b3')" src="img/iconb.png" style="position:relative; top:-242px; left:2px; z-index:2;" />
+					<img id="b2" onclick="clicked('b2')" src="img/iconn.png" style="position:relative; top:-242px; left:-2px; z-index:2;" />
+					<img id="b1" onclick="clicked('b1')" src="img/iconn.png" style="position:relative; top:-242px; left:-7px; z-index:2;" />
+					<img id="b6" onclick="clicked('b6')" src="img/iconn.png" style="position:relative; top:-242px; left:117px; z-index:2;" />
+					<img id="b5" onclick="clicked('b5')" src="img/iconb.png" style="position:relative; top:-242px; left:113px; z-index:2;" />
 					<!-- DICE -->
-					<img id="dicea" src="img/d1.png" style="position:relative; top:-158px; left:-395px; z-index:2;"/>
-					<img id="diceb" src="img/d0.png" style="position:relative; top:-158px; left:-383px; z-index:2;"/>
-					<img id="dicec" src="img/d0.png" style="position:relative; top:-210px; left:142px; z-index:2;"/>
-					<img id="diced" src="img/d1.png" style="position:relative; top:-210px; left:154px; z-index:2;"/>
+					<img id="dicea" src="img/d1.png" style="position:relative; top:-155px; left:-395px; z-index:2;" />
+					<img id="diceb" src="img/d0.png" style="position:relative; top:-155px; left:-383px; z-index:2;" />
+					<img id="dicec" src="img/d0.png" style="position:relative; top:-207px; left:142px; z-index:2;" />
+					<img id="diced" src="img/d1.png" style="position:relative; top:-207px; left:154px; z-index:2;" />
+					<!-- BUTTON -->
+					<img id="thebutton" onclick="renderFromArray()"src="img/next.png" style="position:relative; top:-210px; left:280px; z-index:2;" />
 			</td></tr>
 		</tbody>
 		</table>
