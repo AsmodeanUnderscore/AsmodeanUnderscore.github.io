@@ -31,6 +31,7 @@ class GameState {
         this.currentPlayer = startingPlayer;
         
         // We set default move info.
+        this.dice = [false, false, false, false];
         this.currentRoll = 0;
         this.availableMoves = new Array();
         this.availableIntro = false;
@@ -56,8 +57,9 @@ class GameState {
     
     // Roll new dice.
     rollDice() {
-        let oneDie = () => Math.ceil(Math.random() - 0.5);
-        this.currentRoll = oneDie() + oneDie() + oneDie() + oneDie();
+        let oneDie = () => (Math.random() > 0.5);
+        this.dice = [oneDie(), oneDie(), oneDie(), oneDie()];
+        this.currentRoll = this.dice.filter(b => b).length;
         
         // Return this for method chaining.
         return this;
