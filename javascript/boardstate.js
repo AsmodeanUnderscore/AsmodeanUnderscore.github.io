@@ -1,4 +1,4 @@
-/* File: board.js
+/* File: boardstate.js
  * Author: AJFarmar August 2019
  */
 
@@ -60,7 +60,7 @@
 class BoardState {
     
     // Initial board setup.
-    constructor(paths = "default") {
+    constructor() {
         // We always begin with an empty board.
         this.oSide = Array(6).fill("n");
         this.mSide = Array(8).fill("n");
@@ -165,7 +165,9 @@ class BoardState {
         // We'll just throw an error if the coordinates or steps are invalid.
         if (!this.verifyCoord(coord)) throw new RangeError("Coordinate \"" + coord + "\" is invalid.");
         if (steps < 0 || steps > 4) throw new RangeError("Step count " + steps.toString() + " is invalid.");
-        if (steps == 0) return true;
+        
+        // We'll say that no move with inaction is valid.
+        if (steps == 0) return false;
         
         // Get the colour of the player on that coordinate
         let player = this.contentsOf(coord);
@@ -199,6 +201,13 @@ class BoardState {
         // We'll just throw an error if the coordinates, steps, or player are invalid.
         if (steps < 0 || steps > 4) throw new RangeError("Step count " + steps.toString() + " is invalid.");
         if (player != "o" && player != "b") throw new Error("Player \"" + player + "\" is invalid.");
+        
+        // If we've rolled 0, no intro is valid.
+        if (steps == 0) return false;
+        
+        // If nothing is in the pot, no intro is valid.
+        let pot = {"o": this.oPot, "b": this.bPot}[player];
+        if (pot == 0) return false;
         
         // Fetch the appropriate path, and find whatever the piece will land on.
         let path = {"o": this.oPath, "b": this.bPath}[player];
@@ -334,7 +343,7 @@ class BoardState {
 
 
 
-// This allows this file to be tested with node.js
+// This allows this file to be tested
 function boardTests() {
     console.log(">>> Example 1");
     var myBoard = new BoardState();
