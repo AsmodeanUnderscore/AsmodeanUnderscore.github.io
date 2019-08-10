@@ -26,6 +26,9 @@ class GameState {
     constructor(startingPlayer = "o") {
         // We set up a new board state.
         this.board = new BoardState();
+		
+		// This is the zeroth turn, since nothing's happened yet:
+		this.turnCount = 0;
         
         // We set the current player.
         this.currentPlayer = startingPlayer;
@@ -127,10 +130,11 @@ class GameState {
 }
 
 // This allows this file to be tested
+// add "async" to the start of this function if you want to use the sleep version
 function gameTests() {
     console.log(">>> Random tests.");
-    var myGame = new GameState();
-    for (let i = 1; i <= 1000 && myGame.winner == "n"; i++) {
+    // this version is the sleep version
+	/* for (let i = 1; i <= 1000 && myGame.winner == "n"; i++) {
         if (myGame.availableMoves.length != 0) {
             console.log(`Move ${i}: Player ${myGame.currentPlayer} moves from ${myGame.availableMoves[0]} by ${myGame.currentRoll} steps.`);
             myGame.performMove(myGame.availableMoves[0]);
@@ -141,10 +145,30 @@ function gameTests() {
             console.log(`Move ${i}: Player ${myGame.currentPlayer} cannot move with a roll of ${myGame.currentRoll} steps.`);
             myGame.abdicate();
         }
+		renderBoard(myGame); // renders the board
+		await sleep(1000); // puts a 1-second gap in between iterations
     }
+	*/
+	
+	// this version updates when you press the iterate button (hopefully)
+
     if (myGame.winner != "n") console.log(`Game won by Player ${myGame.winner}.`);
     else console.log(`No winner.`);
     
     
-    return "Tests done!";
+    //return "Tests done!";
+}
+
+function iterateSomeMore() {
+	if (myGame.availableMoves.length != 0) {
+        console.log(`Move ${myGame.turnCount}: Player ${myGame.currentPlayer} moves from ${myGame.availableMoves[0]} by ${myGame.currentRoll} steps.`);
+        myGame.performMove(myGame.availableMoves[0]);
+    } else if (myGame.availableIntro) {
+        console.log(`Move ${myGame.turnCount}: Player ${myGame.currentPlayer} introduces a piece at ${myGame.currentRoll} steps.`);
+        myGame.performIntro();
+    } else {
+        console.log(`Move ${myGame.turnCount}: Player ${myGame.currentPlayer} cannot move with a roll of ${myGame.currentRoll} steps.`);
+        myGame.abdicate();
+    }
+	renderBoard(myGame); // renders the board
 }
